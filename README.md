@@ -1,375 +1,262 @@
-<p align="center">
-  <a href="https://www.getzep.com/">
-    <img src="https://github.com/user-attachments/assets/119c5682-9654-4257-8922-56b7cb8ffd73" width="150" alt="Zep Logo">
-  </a>
-</p>
+# Graphiti
 
-<h1 align="center">
-Graphiti
-</h1>
-<h2 align="center"> Build Real-Time Knowledge Graphs for AI Agents</h2>
-<div align="center">
+> **Build Real-Time Knowledge Graphs for AI Agents**
 
 [![Lint](https://github.com/getzep/Graphiti/actions/workflows/lint.yml/badge.svg?style=flat)](https://github.com/getzep/Graphiti/actions/workflows/lint.yml)
 [![Unit Tests](https://github.com/getzep/Graphiti/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/getzep/Graphiti/actions/workflows/unit_tests.yml)
-[![MyPy Check](https://github.com/getzep/Graphiti/actions/workflows/typecheck.yml/badge.svg)](https://github.com/getzep/Graphiti/actions/workflows/typecheck.yml)
+[![GitHub Repo stars](https://img.shields.io/github/stars/getzep/graphiti)](https://github.com/getzep/graphiti)
 
-![GitHub Repo stars](https://img.shields.io/github/stars/getzep/graphiti)
-[![Discord](https://dcbadge.vercel.app/api/server/W8Kw6bsgXQ?style=flat)](https://discord.com/invite/W8Kw6bsgXQ)
-[![arXiv](https://img.shields.io/badge/arXiv-2501.13956-b31b1b.svg?style=flat)](https://arxiv.org/abs/2501.13956)
-[![Release](https://img.shields.io/github/v/release/getzep/graphiti?style=flat&label=Release&color=limegreen)](https://github.com/getzep/graphiti/releases)
+Graphiti is a framework for building and querying temporally-aware knowledge graphs, specifically tailored for AI agents operating in dynamic environments. Unlike traditional RAG methods, Graphiti continuously integrates user interactions, structured and unstructured enterprise data, and external information into a coherent, queryable graph.
 
-</div>
-<div align="center">
+## 🚀 Quick Start
 
-<a href="https://trendshift.io/repositories/12986" target="_blank"><img src="https://trendshift.io/api/badge/repositories/12986" alt="getzep%2Fgraphiti | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+### Prerequisites
 
-</div>
+1. **Python 3.8+**
+2. **Neo4j Database** (running locally or cloud)
+3. **API Keys** (OpenAI, Groq, or Anthropic)
 
-:star: _Help us reach more developers and grow the Graphiti community. Star this repo!_
-
-<br />
-
-> [!TIP]
-> Check out the new [MCP server for Graphiti](mcp_server/README.md)! Give Claude, Cursor, and other MCP clients powerful Knowledge Graph-based memory.
-
-Graphiti is a framework for building and querying temporally-aware knowledge graphs, specifically tailored for AI agents operating in dynamic environments. Unlike traditional retrieval-augmented generation (RAG) methods, Graphiti continuously integrates user interactions, structured and unstructured enterprise data, and external information into a coherent, queryable graph. The framework supports incremental data updates, efficient retrieval, and precise historical queries without requiring complete graph recomputation, making it suitable for developing interactive, context-aware AI applications.
-
-Use Graphiti to:
-
-- Integrate and maintain dynamic user interactions and business data.
-- Facilitate state-based reasoning and task automation for agents.
-- Query complex, evolving data with semantic, keyword, and graph-based search methods.
-
-<br />
-
-<p align="center">
-    <img src="images/graphiti-graph-intro.gif" alt="Graphiti temporal walkthrough" width="700px">   
-</p>
-
-<br />
-
-A knowledge graph is a network of interconnected facts, such as _"Kendra loves Adidas shoes."_ Each fact is a "triplet" represented by two entities, or
-nodes ("Kendra", "Adidas shoes"), and their relationship, or edge ("loves"). Knowledge Graphs have been explored
-extensively for information retrieval. What makes Graphiti unique is its ability to autonomously build a knowledge graph
-while handling changing relationships and maintaining historical context.
-
-## Graphiti and Zep Memory
-
-Graphiti powers the core of [Zep's memory layer](https://www.getzep.com) for AI Agents.
-
-Using Graphiti, we've demonstrated Zep is
-the [State of the Art in Agent Memory](https://blog.getzep.com/state-of-the-art-agent-memory/).
-
-Read our paper: [Zep: A Temporal Knowledge Graph Architecture for Agent Memory](https://arxiv.org/abs/2501.13956).
-
-We're excited to open-source Graphiti, believing its potential reaches far beyond AI memory applications.
-
-<p align="center">
-    <a href="https://arxiv.org/abs/2501.13956"><img src="images/arxiv-screenshot.png" alt="Zep: A Temporal Knowledge Graph Architecture for Agent Memory" width="700px"></a>
-</p>
-
-## Why Graphiti?
-
-Traditional RAG approaches often rely on batch processing and static data summarization, making them inefficient for frequently changing data. Graphiti addresses these challenges by providing:
-
-- **Real-Time Incremental Updates:** Immediate integration of new data episodes without batch recomputation.
-- **Bi-Temporal Data Model:** Explicit tracking of event occurrence and ingestion times, allowing accurate point-in-time queries.
-- **Efficient Hybrid Retrieval:** Combines semantic embeddings, keyword (BM25), and graph traversal to achieve low-latency queries without reliance on LLM summarization.
-- **Custom Entity Definitions:** Flexible ontology creation and support for developer-defined entities through straightforward Pydantic models.
-- **Scalability:** Efficiently manages large datasets with parallel processing, suitable for enterprise environments.
-
-<p align="center">
-    <img src="/images/graphiti-intro-slides-stock-2.gif" alt="Graphiti structured + unstructured demo" width="700px">   
-</p>
-
-## Graphiti vs. GraphRAG
-
-| Aspect                     | GraphRAG                              | Graphiti                                         |
-| -------------------------- | ------------------------------------- | ------------------------------------------------ |
-| **Primary Use**            | Static document summarization         | Dynamic data management                          |
-| **Data Handling**          | Batch-oriented processing             | Continuous, incremental updates                  |
-| **Knowledge Structure**    | Entity clusters & community summaries | Episodic data, semantic entities, communities    |
-| **Retrieval Method**       | Sequential LLM summarization          | Hybrid semantic, keyword, and graph-based search |
-| **Adaptability**           | Low                                   | High                                             |
-| **Temporal Handling**      | Basic timestamp tracking              | Explicit bi-temporal tracking                    |
-| **Contradiction Handling** | LLM-driven summarization judgments    | Temporal edge invalidation                       |
-| **Query Latency**          | Seconds to tens of seconds            | Typically sub-second latency                     |
-| **Custom Entity Types**    | No                                    | Yes, customizable                                |
-| **Scalability**            | Moderate                              | High, optimized for large datasets               |
-
-Graphiti is specifically designed to address the challenges of dynamic and frequently updated datasets, making it particularly suitable for applications requiring real-time interaction and precise historical queries.
-
-## Installation
-
-Requirements:
-
-- Python 3.10 or higher
-- Neo4j 5.26 / FalkorDB 1.1.2 or higher (serves as the embeddings storage backend)
-- OpenAI API key (for LLM inference and embedding)
-
-> [!IMPORTANT]
-> Graphiti works best with LLM services that support Structured Output (such as OpenAI and Gemini).
-> Using other services may result in incorrect output schemas and ingestion failures. This is particularly
-> problematic when using smaller models.
-
-Optional:
-
-- Google Gemini, Anthropic, or Groq API key (for alternative LLM providers)
-
-> [!TIP]
-> The simplest way to install Neo4j is via [Neo4j Desktop](https://neo4j.com/download/). It provides a user-friendly
-> interface to manage Neo4j instances and databases.
+### Installation
 
 ```bash
-pip install graphiti-core
+# Clone the repository
+git clone https://github.com/getzep/graphiti.git
+cd graphiti
+
+# Install dependencies
+pip install -e .
+
+# Or with poetry
+poetry install
 ```
 
-or
+### Environment Setup
 
 ```bash
-poetry add graphiti-core
+# Required environment variables
+export NEO4J_URI="bolt://localhost:7687"
+export NEO4J_USER="neo4j"
+export NEO4J_PASSWORD="your_password"
+
+# Choose one LLM provider
+export OPENAI_API_KEY="your_openai_key"
+# OR
+export GROQ_API_KEY="your_groq_key"
+# OR
+export ANTHROPIC_API_KEY="your_anthropic_key"
 ```
 
-You can also install optional LLM providers as extras:
+### Start Neo4j
+
+**Option 1: Docker (Recommended)**
+```bash
+docker run -d \
+  --name neo4j \
+  -p 7474:7474 -p 7687:7687 \
+  -e NEO4J_AUTH=neo4j/password \
+  neo4j:latest
+```
+
+**Option 2: Neo4j Desktop**
+- Download and install [Neo4j Desktop](https://neo4j.com/download/)
+- Create a new database with password `password`
+- Start the database
+
+## 📚 Policy Examples
+
+Graphiti includes comprehensive policy examples demonstrating complex access control systems:
+
+### 1. Time-of-Day Policy
+**Simple time-based access control** - Restricts non-critical queries to working hours while allowing critical queries anytime.
 
 ```bash
-# Install with Anthropic support
-pip install graphiti-core[anthropic]
-
-# Install with Groq support
-pip install graphiti-core[groq]
-
-# Install with Google Gemini support
-pip install graphiti-core[google-genai]
-
-# Install with multiple providers
-pip install graphiti-core[anthropic,groq,google-genai]
+cd time_of_day_policy
+python time_of_day_policy_example.py
 ```
 
-## Quick Start
+**Features:**
+- Time-based access restrictions
+- Query type classification (critical, non-critical, admin, research, weekend)
+- Configurable working hours
+- JSON-based configuration
 
-> [!IMPORTANT]
-> Graphiti uses OpenAI for LLM inference and embedding. Ensure that an `OPENAI_API_KEY` is set in your environment.
-> Support for Anthropic and Groq LLM inferences is available, too. Other LLM providers may be supported via OpenAI
-> compatible APIs.
+### 2. Mission Phase Policy
+**Complex role-based access control** with phase-specific restrictions for mission operations.
 
-For a complete working example, see the [Quickstart Example](./examples/quickstart/README.md) in the examples directory. The quickstart demonstrates:
+```bash
+cd mission_phase_policy
+python mission_phase_policy_example.py
+```
 
-1. Connecting to a Neo4j database
-2. Initializing Graphiti indices and constraints
-3. Adding episodes to the graph (both text and structured JSON)
-4. Searching for relationships (edges) using hybrid search
-5. Reranking search results using graph distance
-6. Searching for nodes using predefined search recipes
+**Features:**
+- Role-based access control (RBAC)
+- Mission phase-specific policies
+- Commander override permissions
+- Emergency protocol access
 
-The example is fully documented with clear explanations of each functionality and includes a comprehensive README with setup instructions and next steps.
+### 3. Prompt Sensitivity Policy
+**Content filtering and redaction system** that automatically detects and redacts sensitive information.
 
-## MCP Server
+```bash
+cd prompt_sensitivity_policy
+python prompt_sensitivity_example.py
+```
 
-The `mcp_server` directory contains a Model Context Protocol (MCP) server implementation for Graphiti. This server allows AI assistants to interact with Graphiti's knowledge graph capabilities through the MCP protocol.
+**Features:**
+- Firewall detection of sensitive terms
+- Phase-specific content redaction
+- Dynamic redaction based on mission phase
+- Emergency override for safety
 
-Key features of the MCP server include:
+### 4. Before/After Event Policy
+**Time-based blocking system** that restricts access to content based on scheduled events.
 
-- Episode management (add, retrieve, delete)
-- Entity management and relationship handling
-- Semantic and hybrid search capabilities
-- Group management for organizing related data
-- Graph maintenance operations
+```bash
+cd before_after_event_policy
+python before_after_event_example.py
+```
 
-The MCP server can be deployed using Docker with Neo4j, making it easy to integrate Graphiti into your AI assistant workflows.
+**Features:**
+- Scheduled event blocking based on timestamps
+- Before/after event access control
+- Multiple concurrent scheduled events
+- Timezone-aware timestamp comparisons
 
-For detailed setup instructions and usage examples, see the [MCP server README](./mcp_server/README.md).
+### 5. Multi-Factor Contradiction Policy
+**Complex access control system** that handles multiple conflicting rules and contradiction resolution.
 
-## REST Service
+```bash
+cd multi_factor_contradiction_policy
+python multi_factor_contradiction_example.py
+```
 
-The `server` directory contains an API service for interacting with the Graphiti API. It is built using FastAPI.
+**Features:**
+- Multiple conflicting rules and restrictions
+- Contradiction resolution based on priority hierarchy
+- User clearance levels and permissions
+- Commander override and emergency access
 
-Please see the [server README](./server/README.md) for more information.
+### 6. Timezone-Aware Policy
+**Sophisticated timezone-aware access control** that handles user identification and location-based timezone detection.
 
-## Optional Environment Variables
+```bash
+cd timezone_aware_policy
+python timezone_aware_example.py
+```
 
-In addition to the Neo4j and OpenAi-compatible credentials, Graphiti also has a few optional environment variables.
-If you are using one of our supported models, such as Anthropic or Voyage models, the necessary environment variables
-must be set.
+**Features:**
+- User identification with email and name
+- Location-based timezone detection
+- Dynamic policy application based on user's local time
+- Comprehensive location-to-timezone mapping
 
-`USE_PARALLEL_RUNTIME` is an optional boolean variable that can be set to true if you wish
-to enable Neo4j's parallel runtime feature for several of our search queries.
-Note that this feature is not supported for Neo4j Community edition or for smaller AuraDB instances,
-as such this feature is off by default.
+## 🛠️ Basic Usage
 
-## Using Graphiti with Azure OpenAI
-
-Graphiti supports Azure OpenAI for both LLM inference and embeddings. To use Azure OpenAI, you'll need to configure both the LLM client and embedder with your Azure OpenAI credentials.
+### Simple Example
 
 ```python
-from openai import AsyncAzureOpenAI
+import asyncio
+from datetime import datetime, timezone
 from graphiti_core import Graphiti
-from graphiti_core.llm_client import LLMConfig, OpenAIClient
-from graphiti_core.embedder.openai import OpenAIEmbedder, OpenAIEmbedderConfig
-from graphiti_core.cross_encoder.openai_reranker_client import OpenAIRerankerClient
+from graphiti_core.llm_client import OpenAIClient, LLMConfig
+from graphiti_core.nodes import EpisodeType
 
-# Azure OpenAI configuration
-api_key = "<your-api-key>"
-api_version = "<your-api-version>"
-azure_endpoint = "<your-azure-endpoint>"
-
-# Create Azure OpenAI client for LLM
-azure_openai_client = AsyncAzureOpenAI(
-    api_key=api_key,
-    api_version=api_version,
-    azure_endpoint=azure_endpoint
-)
-
-# Create LLM Config with your Azure deployed model names
-azure_llm_config = LLMConfig(
-    small_model="gpt-4.1-nano",
-    model="gpt-4.1-mini",
-)
-
-# Initialize Graphiti with Azure OpenAI clients
-graphiti = Graphiti(
-    "bolt://localhost:7687",
-    "neo4j",
-    "password",
-    llm_client=OpenAIClient(
-        llm_config=azure_llm_config,
-        client=azure_openai_client
-    ),
-    embedder=OpenAIEmbedder(
-        config=OpenAIEmbedderConfig(
-            embedding_model="text-embedding-3-small"  # Use your Azure deployed embedding model name
-        ),
-        client=azure_openai_client
-    ),
-    # Optional: Configure the OpenAI cross encoder with Azure OpenAI
-    cross_encoder=OpenAIRerankerClient(
-        llm_config=azure_llm_config,
-        client=azure_openai_client
+async def main():
+    # Initialize LLM client
+    llm_config = LLMConfig(model="gpt-4o-mini")
+    llm_client = OpenAIClient(llm_config)
+    
+    # Initialize Graphiti
+    graphiti = Graphiti(
+        neo4j_uri="bolt://localhost:7687",
+        neo4j_user="neo4j",
+        neo4j_password="password",
+        llm_client=llm_client
     )
-)
-
-# Now you can use Graphiti with Azure OpenAI
-```
-
-Make sure to replace the placeholder values with your actual Azure OpenAI credentials and specify the correct embedding model name that's deployed in your Azure OpenAI service.
-
-## Using Graphiti with Google Gemini
-
-Graphiti supports Google's Gemini models for both LLM inference and embeddings. To use Gemini, you'll need to configure both the LLM client and embedder with your Google API key.
-
-Install Graphiti:
-
-```bash
-poetry add "graphiti-core[google-genai]"
-
-# or
-
-uv add "graphiti-core[google-genai]"
-```
-
-```python
-from graphiti_core import Graphiti
-from graphiti_core.llm_client.gemini_client import GeminiClient, LLMConfig
-from graphiti_core.embedder.gemini import GeminiEmbedder, GeminiEmbedderConfig
-
-# Google API key configuration
-api_key = "<your-google-api-key>"
-
-# Initialize Graphiti with Gemini clients
-graphiti = Graphiti(
-    "bolt://localhost:7687",
-    "neo4j",
-    "password",
-    llm_client=GeminiClient(
-        config=LLMConfig(
-            api_key=api_key,
-            model="gemini-2.0-flash"
-        )
-    ),
-    embedder=GeminiEmbedder(
-        config=GeminiEmbedderConfig(
-            api_key=api_key,
-            embedding_model="embedding-001"
-        )
+    
+    # Build indices
+    await graphiti.build_indices_and_constraints()
+    
+    # Add an episode
+    await graphiti.add_episode(
+        name="User Query",
+        episode_body="What is the weather like today?",
+        source=EpisodeType.text,
+        source_description="User input",
+        reference_time=datetime.now(timezone.utc)
     )
-)
+    
+    # Query the graph
+    results = await graphiti.query("weather information")
+    print(results)
+    
+    # Close connection
+    await graphiti.close()
 
-# Now you can use Graphiti with Google Gemini
+# Run the example
+asyncio.run(main())
 ```
 
-## Using Graphiti with Ollama (Local LLM)
+## 🔧 Configuration
 
-Graphiti supports Ollama for running local LLMs and embedding models via Ollama's OpenAI-compatible API. This is ideal for privacy-focused applications or when you want to avoid API costs.
+All policy examples use JSON configuration files that allow you to easily modify:
+- Policy rules and logic
+- Test scenarios
+- Access permissions
+- Working hours and phases
+- User roles and query types
 
-
-Install the models:
-ollama pull deepseek-r1:7b         # LLM
-ollama pull nomic-embed-text       # embeddings
-
-```python
-from graphiti_core import Graphiti
-from graphiti_core.llm_client.config import LLMConfig
-from graphiti_core.llm_client.openai_client import OpenAIClient
-from graphiti_core.embedder.openai import OpenAIEmbedder, OpenAIEmbedderConfig
-from graphiti_core.cross_encoder.openai_reranker_client import OpenAIRerankerClient
-
-# Configure Ollama LLM client
-llm_config = LLMConfig(
-    api_key="abc",  # Ollama doesn't require a real API key
-    model="deepseek-r1:7b",
-    small_model="deepseek-r1:7b",
-    base_url="http://localhost:11434/v1", # Ollama provides this port
-)
-
-llm_client = OpenAIClient(config=llm_config)
-
-# Initialize Graphiti with Ollama clients
-graphiti = Graphiti(
-    "bolt://localhost:7687",
-    "neo4j",
-    "password",
-    llm_client=llm_client,
-    embedder=OpenAIEmbedder(
-        config=OpenAIEmbedderConfig(
-            api_key="abc",
-            embedding_model="nomic-embed-text",
-            embedding_dim=768,
-            base_url="http://localhost:11434/v1",
-        )
-    ),
-    cross_encoder=OpenAIRerankerClient(client=llm_client, config=llm_config),
-)
-
-# Now you can use Graphiti with local Ollama models
+Example configuration structure:
+```json
+{
+  "query_types": {
+    "critical": {"allowed_hours": "always"},
+    "non_critical": {"allowed_hours": "09:00-17:00"},
+    "admin": {"allowed_hours": "08:00-20:00"}
+  },
+  "test_scenarios": [
+    {
+      "name": "Emergency system status check",
+      "query": "Check system status immediately",
+      "query_type": "critical",
+      "expected_result": "ALLOWED"
+    }
+  ]
+}
 ```
 
-Ensure Ollama is running (`ollama serve`) and that you have pulled the models you want to use.
+## 🏗️ Architecture
 
+Graphiti uses a knowledge graph approach with:
 
-## Documentation
+- **Nodes**: Represent entities (users, resources, policies)
+- **Edges**: Represent relationships and temporal connections
+- **Episodes**: Capture events and interactions over time
+- **Embeddings**: Enable semantic search and similarity matching
 
-- [Guides and API documentation](https://help.getzep.com/graphiti).
-- [Quick Start](https://help.getzep.com/graphiti/graphiti/quick-start)
-- [Building an agent with LangChain's LangGraph and Graphiti](https://help.getzep.com/graphiti/graphiti/lang-graph-agent)
+## 📖 Documentation
 
-## Status and Roadmap
+- **API Reference**: See `graphiti_core/` for detailed API documentation
+- **Examples**: Check the `examples/` directory for more usage examples
+- **Tests**: Run `pytest` to see test examples
 
-Graphiti is under active development. We aim to maintain API stability while working on:
+## 🤝 Contributing
 
-- [x] Supporting custom graph schemas:
-  - Allow developers to provide their own defined node and edge classes when ingesting episodes
-  - Enable more flexible knowledge representation tailored to specific use cases
-- [x] Enhancing retrieval capabilities with more robust and configurable options
-- [x] Graphiti MCP Server
-- [ ] Expanding test coverage to ensure reliability and catch edge cases
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
 
-## Contributing
+## 📄 License
 
-We encourage and appreciate all forms of contributions, whether it's code, documentation, addressing GitHub Issues, or
-answering questions in the Graphiti Discord channel. For detailed guidelines on code contributions, please refer
-to [CONTRIBUTING](CONTRIBUTING.md).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Support
+## 🆘 Support
 
-Join the [Zep Discord server](https://discord.com/invite/W8Kw6bsgXQ) and make your way to the **#Graphiti** channel!
+- **Issues**: [GitHub Issues](https://github.com/getzep/graphiti/issues)
+- **Discord**: [Join our Discord](https://discord.com/invite/W8Kw6bsgXQ)
+- **Documentation**: [Full Documentation](https://docs.getzep.com)
+
+---
+

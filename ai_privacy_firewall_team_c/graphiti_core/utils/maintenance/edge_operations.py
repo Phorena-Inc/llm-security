@@ -196,6 +196,11 @@ async def extract_edges(
 
         source_node_idx = edge_data.get('source_entity_id', -1)
         target_node_idx = edge_data.get('target_entity_id', -1)
+        # Guard against None values from LLM output
+        if source_node_idx is None:
+            source_node_idx = -1
+        if target_node_idx is None:
+            target_node_idx = -1
         if not (-1 < source_node_idx < len(nodes) and -1 < target_node_idx < len(nodes)):
             logger.warning(
                 f'WARNING: source or target node not filled {edge_data.get("edge_name")}. source_node_uuid: {source_node_idx} and target_node_uuid: {target_node_idx} '

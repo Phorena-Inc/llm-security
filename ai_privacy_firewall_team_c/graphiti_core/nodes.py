@@ -35,6 +35,7 @@ from graphiti_core.models.nodes.node_db_queries import (
     EPISODIC_NODE_SAVE,
 )
 from graphiti_core.utils.datetime_utils import utc_now
+from graphiti_core.utils.flatten import flatten_summary
 
 logger = logging.getLogger(__name__)
 
@@ -290,10 +291,15 @@ class EpisodicNode(Node):
 
 class EntityNode(Node):
     name_embedding: list[float] | None = Field(default=None, description='embedding of the name')
-    summary: str = Field(description='regional summary of surrounding edges', default_factory=str)
+    summary: str = Field(default='')
     attributes: dict[str, Any] = Field(
         default={}, description='Additional attributes of the node. Dependent on node labels'
     )
+
+    def __init__(self, **data):
+        if 'summary' in data:
+            data['summary'] = flatten_summary(data['summary'])
+        super().__init__(**data)
 
     async def generate_name_embedding(self, embedder: EmbedderClient):
         start = time()

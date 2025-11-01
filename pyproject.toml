@@ -86,6 +86,11 @@ quote-style = "single"
 indent-style = "space"
 docstring-code-format = true
 
+[tool.uv.workspace]
+members = [
+    "ai_privacy_firewall_team_c",
+]
+
 [mypy-falkordb]
 ignore_missing_imports = true
 

@@ -41,6 +41,7 @@ from graphiti_core.search.search_config_recipes import NODE_HYBRID_SEARCH_RRF
 from graphiti_core.search.search_filters import SearchFilters
 from graphiti_core.utils.datetime_utils import utc_now
 from graphiti_core.utils.maintenance.edge_operations import filter_existing_duplicate_of_edges
+from graphiti_core.utils.flatten import flatten_summary
 
 logger = logging.getLogger(__name__)
 
@@ -160,7 +161,7 @@ async def extract_nodes(
             name=extracted_entity.name,
             group_id=episode.group_id,
             labels=labels,
-            summary='',
+            summary=flatten_summary(getattr(extracted_entity, 'summary', '')),
             created_at=utc_now(),
         )
         extracted_nodes.append(new_node)
@@ -416,6 +417,9 @@ async def extract_attributes_from_node(
 
     node.attributes.update(node_attributes)
 
+    # After extracting attributes, flatten summary if present
+    if hasattr(node, 'summary'):
+        node.summary = flatten_summary(node.summary)
     return node
 
 
