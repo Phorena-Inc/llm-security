@@ -20,7 +20,7 @@ Graphiti is a framework for building and querying temporally-aware knowledge gra
 
 ```bash
 # Clone the repository
-git clone https://github.com/getzep/graphiti.git
+git clone https://github.com/Phorena-Inc/llm-security.git
 cd graphiti
 
 # Install dependencies
