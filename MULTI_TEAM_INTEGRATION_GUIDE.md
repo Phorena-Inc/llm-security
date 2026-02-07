@@ -23,7 +23,7 @@ Required API Keys (add to .env file):
 STEP 1: NAVIGATE TO PROJECT ROOT
 ================================================================================
 
-cd /home/nibin/Desktop/Internship/llm-security
+cd llm-security
 
 ================================================================================
 STEP 2: CREATE AND ACTIVATE VIRTUAL ENVIRONMENT
@@ -213,7 +213,7 @@ QUICK START (ALL COMMANDS IN SEQUENCE)
 
 # Copy and paste these commands for a complete fresh setup:
 
-cd /home/nibin/Desktop/Internship/llm-security
+cd llm-security
 rm -rf .venv
 python3 -m venv .venv
 source .venv/bin/activate
@@ -232,7 +232,7 @@ If you prefer using the 'uv' package manager:
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Sync all dependencies
-cd /home/nibin/Desktop/Internship/llm-security
+cd llm-security
 uv sync
 
 # Run the test
