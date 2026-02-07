@@ -19,6 +19,15 @@ dependencies = [
     "tenacity>=9.0.0",
     "numpy>=1.0.0",
     "python-dotenv>=1.0.1",
+    "deal>=4.24.0",
+    "PyYAML>=6.0",
+    "python-dateutil>=2.8.0",
+    "pytz>=2023.3",
+    "fastapi>=0.104.0",
+    "uvicorn>=0.24.0",
+    "httpx>=0.25.0",
+    "groq>=0.4.0",
+    "owlready2>=0.48",
 ]
 
 [project.urls]

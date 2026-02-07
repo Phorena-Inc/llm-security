@@ -223,7 +223,8 @@ class MultiTeamIntegrationTest:
                 }
             }
         }
-    
+
+        
     def _print_scenario_result(self, result):
         """Print detailed result for a single scenario."""
         status_icon = "✅" if result['status'] == "PASS" else "❌" if result['status'] == "FAIL" else "⚠️"
